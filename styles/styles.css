@@ -1,0 +1,187 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Encabezado */
+.encabezado {
+  background-color: #0077cc;
+  color: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.navegacion a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+.navegacion a:hover {
+  text-decoration: underline;
+}
+
+/* Hero */
+.hero {
+  background-image: url('https://source.unsplash.com/1600x900/?travel,beach');
+  background-size: cover;
+  background-position: center;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+}
+
+.hero-contenido {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.boton {
+  background-color: #ffc107;
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.boton:hover {
+  background-color: #e0a800;
+}
+
+/* Destinos */
+.destinos {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.destinos h3 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.grid-destinos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.destino {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+
+.destino:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.destino img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.destino .info {
+  padding: 1rem;
+}
+
+.destino h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Llamado a la acción */
+.cta {
+  background-color: #e3f2fd;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.cta h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.cta p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Pie de página */
+.pie {
+  background-color: #333;
+  color: #fff;
+  padding: 1.5rem 1rem;
+}
+
+.contenedor-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.enlaces-footer {
+  margin-top: 0.5rem;
+}
+
+.enlaces-footer a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+.enlaces-footer a:hover {
+  text-decoration: underline;
+}
