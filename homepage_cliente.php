@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-// Control de acceso
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] != 'cliente') {
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'cliente') {
     header("Location: login.php");
     exit;
 }
@@ -12,12 +11,11 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] != 'cliente') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenida Cliente</title>
+    <title>Bienvenido Cliente</title>
 </head>
 <body>
-    <h1>Bienvenido Cliente: <?php echo $_SESSION['usuario']; ?></h1>
-
+    <h1>Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?> (cliente)</h1>
     <p>Gracias por usar nuestros servicios.</p>
-
+    <a href="logout.php">Cerrar sesión</a>
 </body>
 </html>
