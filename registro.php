@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
-    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/registro.css">
 </head>
 <body>
 <form method="post">
@@ -110,4 +110,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
     </div>
 </body>
 </html>
-    

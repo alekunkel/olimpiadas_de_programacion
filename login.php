@@ -1,7 +1,6 @@
 <?php
 ob_start();
 session_start();
-
 $conexion = mysqli_connect("localhost", "root", "", "turismo");
 
 if (!$conexion) {
@@ -60,7 +59,7 @@ ob_end_flush();
 
         <form method="post">
             <div class="mb-3">
-                <label for="usuario">Nombre de usuario o correo electrónico</label>
+                <label for="usuario">correo electrónico</label>
                 <input type="text" name="usuario" id="usuario" class="form-control" required>
             </div>
             <div class="mb-3">
