@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-// Control de acceso
-if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] !== "admin") {
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] != 'admin') {
     header("Location: login.php");
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,9 +15,10 @@ if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] !== "admin") {
 </head>
 <body>
     <h1>Bienvenido Administrador</h1>
-<button onclick=""modificar">modificar carrito</button>
+<a href="index.html">cerrar sesión</a>
+    <br> 
+<a href="tabla_historica.php">ver tabla histórica de ventas</a>
 <br>
-<button onclick=""ver_viajes">aceptar o rechazar pedidos</button>
-
+    <a href="carrito.php">Ver carrito de clientes</a>
 </body>
 </html>

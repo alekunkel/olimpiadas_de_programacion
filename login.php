@@ -1,10 +1,11 @@
 <?php
 ob_start();
 session_start();
-$conexion = mysqli_connect("localhost", "root", "", "turismo");
 
-if (!$conexion) {
-    die("Error al conectar con la base de datos.");
+$conexion = new mysqli("localhost", "root", "", "turismo");
+
+if ($conexion->connect_error) {
+    die("Error al conectar con la base de datos: " . $conexion->connect_error);
 }
 
 $mensaje = "";
@@ -12,41 +13,43 @@ $mensaje = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["iniciar_sesion"])) {
     $usuario = trim($_POST["usuario"]);
     $contrasena = trim($_POST["contrasena"]);
-    if ($usuario === "admin@turismo.com" && $contrasena === "admin123") {
-        $_SESSION["usuario"] = "Administrador";
-        $_SESSION["rol"] = "admin";
 
+    if ($usuario === "admin" && $contrasena === "Admin1234") {
+        $_SESSION["usuario"] = "admin";
+        $_SESSION["rol"] = "admin";
         header("Location: homepage_admin.php");
         exit;
     }
 
-    $sql = "SELECT * FROM cliente WHERE Nombre = ? OR Email = ?";
-    $stmt = mysqli_prepare($conexion, $sql);
-
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "ss", $usuario, $usuario);
-        mysqli_stmt_execute($stmt);
-        $resultado = mysqli_stmt_get_result($stmt);
-
-        if ($resultado && $datos = mysqli_fetch_assoc($resultado)) {
-            if ($datos["Contraseña"] === $contrasena) {
-                $_SESSION["usuario_id"] = $datos["Email"];
-                $_SESSION["usuario_nombre"] = $datos["Nombre"];
-                $_SESSION["usuario"] = $datos["Nombre"];
-                $_SESSION["rol"] = "cliente";
-
-                header("Location: homepage_cliente.php");
-                exit;
-            }
-        }
-
-        $mensaje = "<div class='alert alert-danger mt-3'>Usuario o contraseña incorrectos.</div>";
-        mysqli_stmt_close($stmt);
-    } else {
-        $mensaje = "<div class='alert alert-danger mt-3'>Error al preparar la consulta.</div>";
+    $sql = "SELECT * FROM cliente WHERE Usuario = ? OR Email = ? OR Nombre = ? LIMIT 1";
+    $stmt = $conexion->prepare($sql);
+    if (!$stmt) {
+        die("Error en la preparación de la consulta: " . $conexion->error);
     }
+
+    $stmt->bind_param("sss", $usuario, $usuario, $usuario);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($resultado && $datos = $resultado->fetch_assoc()) {
+        if (password_verify($contrasena, $datos["Contraseña"])) {
+            $_SESSION["usuario_id"] = $datos["Email"];
+            $_SESSION["usuario_nombre"] = $datos["Nombre"];
+            $_SESSION["usuario_usuario"] = $datos["Usuario"];
+            $_SESSION["rol"] = "cliente";
+            $_SESSION["ID_cliente"] = $datos["ID_cliente"];
+
+            header("Location: homepage_cliente.php");
+            exit;
+        }
+    }
+
+    $mensaje = "<div class='alert alert-danger mt-3'>Usuario o contraseña incorrectos.</div>";
+
+    $stmt->close();
 }
 
+$conexion->close();
 ob_end_flush();
 ?>
 
@@ -66,7 +69,7 @@ ob_end_flush();
 
         <form method="post">
             <div class="mb-3">
-                <label for="usuario">correo electrónico</label>
+                <label for="usuario">Nombre de usuario o correo electrónico</label>
                 <input type="text" name="usuario" id="usuario" class="form-control" required>
             </div>
             <div class="mb-3">

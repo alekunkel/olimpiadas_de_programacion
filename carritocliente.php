@@ -6,8 +6,12 @@ if ($conexion->connect_error) {
     die("<div class='alert alert-danger'>Error de conexión: " . $conexion->connect_error . "</div>");
 }
 
-// ⚠️ Asegura que el cliente esté logueado
-$id_cliente = $_SESSION['id_cliente'] ?? 1; // Reemplaza esto por una lógica real de login
+if (!isset($_SESSION['ID_cliente'])) {
+    echo "<div class='alert alert-danger'>Error: no se encontró el ID del cliente en la sesión.</div>";
+    exit;
+}
+$ID_cliente = $_SESSION['ID_cliente'];
+
 
 ?>
 
@@ -19,7 +23,7 @@ $id_cliente = $_SESSION['id_cliente'] ?? 1; // Reemplaza esto por una lógica re
     <link rel="stylesheet" href="styles/carrito.css">
 </head>
 <body>
-    <a href="index.html">Inicio</a>
+    <a href="homepage_cliente.php">Inicio</a>
     <h1>Mi Carrito</h1>
 
 <?php
@@ -32,8 +36,8 @@ $sql = "SELECT
             productos.ID_producto,
             productos.Nombre AS nombre_producto
         FROM carrito
-        INNER JOIN productos ON carrito.ID_producto = productos.ID_producto";
-
+        INNER JOIN productos ON carrito.ID_producto = productos.ID_producto
+        WHERE carrito.ID_cliente = $ID_cliente AND carrito.Estado = 'En carrito'";
 $resultado = $conexion->query($sql);
 
 if ($resultado && $resultado->num_rows > 0) {

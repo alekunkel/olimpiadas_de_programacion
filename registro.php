@@ -5,56 +5,52 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
     $bd_usuario = "root";
     $bd_clave = "";
 
-    // Sanitizar entradas
+    $conexion = new mysqli($bd_host, $bd_usuario, $bd_clave, $bd_nombre);
+
+    if ($conexion->connect_error) {
+        die("Error al conectar con la base de datos: " . $conexion->connect_error);
+    }
+
+    // Recibir y limpiar datos (trim para quitar espacios al inicio/final)
     $cli_nombre = trim($_POST["nombre"]);
     $cli_apellido = trim($_POST["apellido"]);
+    $cli_usuario = trim($_POST["usuario"]);
     $cli_telefono = trim($_POST["telefono"]);
     $cli_cod_postal = trim($_POST["codigo_postal"]);
     $cli_localidad = trim($_POST["localidad"]);
     $cli_email = trim($_POST["email"]);
-    $cli_contra = trim($_POST["contraseña"]);
-    $cli_confirmar = trim($_POST["confirmar"]);
+    $cli_contra = $_POST["contraseña"];
+    $cli_confirmar = $_POST["confirmar"];
 
-    // Verificar que las contraseñas coincidan
     if ($cli_contra !== $cli_confirmar) {
-        echo "<div class='alert alert-danger mt-3'>Las contraseñas no coinciden.</div>";
-    } else {
-        // Conectar a la base de datos
-        $conexion = mysqli_connect($bd_host, $bd_usuario, $bd_clave, $bd_nombre);
-
-        if (!$conexion) {
-            die("<div class='alert alert-danger mt-3'>Error al conectar con la base de datos.</div>");
-        }
-
-        // Preparar consulta para evitar SQL Injection
-        $sql_insertar = "INSERT INTO cliente 
-            (Nombre, Apellido, Telefono, Codigo_postal, Localidad, Email, Contraseña) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        $stmt = mysqli_prepare($conexion, $sql_insertar);
-
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sssssss", $cli_nombre, $cli_apellido, $cli_telefono, $cli_cod_postal, $cli_localidad, $cli_email, $cli_contra);
-            $resultado = mysqli_stmt_execute($stmt);
-
-            if ($resultado) {
-                mysqli_stmt_close($stmt);
-                mysqli_close($conexion);
-                header("Location: login.php");
-                exit;
-            } else {
-                echo "<div class='alert alert-danger mt-3'>Error al registrar el cliente.</div>";
-            }
-            mysqli_stmt_close($stmt);
-        } else {
-            echo "<div class='alert alert-danger mt-3'>Error al preparar la consulta.</div>";
-        }
-
-        mysqli_close($conexion);
+        echo "<div class='alert alert-warning mt-3'>Las contraseñas no coinciden.</div>";
+        exit;
     }
+
+    $cli_contra_hash = password_hash($cli_contra, PASSWORD_DEFAULT);
+
+    // Preparar consulta
+    $stmt = $conexion->prepare("INSERT INTO cliente (Nombre, Apellido, Telefono, Codigo_postal, Localidad, Email, Contraseña, Usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
+    if (!$stmt) {
+        die("Error en la preparación de la consulta: " . $conexion->error);
+    }
+
+    // Bind de parámetros: "ssssssss" indica que todos son strings
+    $stmt->bind_param("ssssssss", $cli_nombre, $cli_apellido, $cli_telefono, $cli_cod_postal, $cli_localidad, $cli_email, $cli_contra_hash, $cli_usuario);
+
+    // Ejecutar la consulta
+    if ($stmt->execute()) {
+        header("Location: login.php");
+        exit;
+    } else {
+        echo "<div class='alert alert-danger mt-3'>Error al registrar usuario: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+    $conexion->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +69,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
             <div class="form-group">
                 <label for="apellido">Apellido</label>
                 <input type="text" id="apellido" name="apellido" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="usuario">Nombre de usuario</label>
+                <input type="text" id="usuario" name="usuario" class="form-control">
             </div>
 
             <div class="form-group">

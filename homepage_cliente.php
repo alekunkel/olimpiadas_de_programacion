@@ -6,16 +6,36 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'cliente') {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Bienvenido Cliente</title>
-    <link rel="stylesheet" href="styles/login.css">
+  <meta charset="UTF-8">
+  <title>Bienvenido Cliente</title>
+  <link rel="stylesheet" href="styles/homepage_cliente.css">
 </head>
 <body>
-    <h1>Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?></h1>
-    <h2>Descubrí el mundo con nosotros</h2>
+
+  <!-- Encabezado -->
+  <header class="encabezado">
+    <div class="contenedor">
+      <div class="logo">Explora Viajes</div>
+      <nav class="navegacion">
+        <a href="index.html">Cerrar sesion</a>
+        <a href="#">Destinos</a>
+        <a href="#">Contacto</a>
+        <a href="carritocliente.php">
+          <img src="imagenes/carrito-removebg-preview.png" alt="Carrito" style="width: 30px; height: 30px;">
+        </a>    
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-contenido">
+      <h1>Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?></h1>
+      <h2>Descubrí el mundo con nosotros</h2>
       <p>Viajes personalizados, experiencias inolvidables</p>
       <a href="#" class="boton">Ver destinos</a>
     </div>
@@ -55,10 +75,18 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'cliente') {
     <p>Contactanos y diseñamos juntos el viaje de tus sueños.</p>
     <a href="#" class="boton">Solicitar asesoramiento</a>
   </section>
-<a href="index.html">Cerrar sesion</a>
+
   <!-- Pie de página -->
   <footer class="pie">
     <div class="contenedor-footer">
       <p>&copy; 2025 Explora Viajes. Todos los derechos reservados.</p>
+      <div class="enlaces-footer">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="index.html">Cerrar sesión</a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
