@@ -6,12 +6,12 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'cliente') {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Bienvenido Cliente</title>
+    <link rel="stylesheet" href="styles/login.css">
 </head>
 <body>
     <h1>Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?></h1>
