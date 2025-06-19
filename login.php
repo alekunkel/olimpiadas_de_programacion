@@ -21,24 +21,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["iniciar_sesion"])) {
         exit;
     }
 
-    $sql = "SELECT * FROM cliente WHERE Usuario = ? OR Email = ? OR Nombre = ? LIMIT 1";
-    $stmt = $conexion->prepare($sql);
+    $sql = "SELECT * FROM cliente WHERE Usuario = ? OR Email = ? LIMIT 1";
+    $stmt = $conexion->prepare($sql);   
     if (!$stmt) {
         die("Error en la preparación de la consulta: " . $conexion->error);
     }
 
-    $stmt->bind_param("sss", $usuario, $usuario, $usuario);
+    $stmt->bind_param("ss", $usuario, $usuario);
     $stmt->execute();
     $resultado = $stmt->get_result();
 
     if ($resultado && $datos = $resultado->fetch_assoc()) {
         if (password_verify($contrasena, $datos["Contraseña"])) {
-            $_SESSION["usuario_id"] = $datos["Email"];
-            $_SESSION["usuario_nombre"] = $datos["Nombre"];
-            $_SESSION["usuario_usuario"] = $datos["Usuario"];
-            $_SESSION["rol"] = "cliente";
-            $_SESSION["ID_cliente"] = $datos["ID_cliente"];
-
+                $_SESSION["usuario_id"] = $datos["Email"];
+    $_SESSION["usuario_nombre"] = $datos["Nombre"];
+    $_SESSION["usuario_usuario"] = $datos["Usuario"];
+    $_SESSION["usuario"] = $datos["Usuario"]; // ← Línea añadida
+    $_SESSION["rol"] = "cliente";
+    $_SESSION["ID_cliente"] = $datos["ID_cliente"];
             header("Location: homepage_cliente.php");
             exit;
         }

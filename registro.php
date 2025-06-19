@@ -1,4 +1,6 @@
 <?php
+ob_start();
+session_start();
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
     $bd_nombre = "turismo";
     $bd_host = "localhost";
@@ -11,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
         die("Error al conectar con la base de datos: " . $conexion->connect_error);
     }
 
-    // Recibir y limpiar datos (trim para quitar espacios al inicio/final)
     $cli_nombre = trim($_POST["nombre"]);
     $cli_apellido = trim($_POST["apellido"]);
     $cli_usuario = trim($_POST["usuario"]);
@@ -50,6 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registrarse"])) {
     $stmt->close();
     $conexion->close();
 }
+ob_end_flush();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

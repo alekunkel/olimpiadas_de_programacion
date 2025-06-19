@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/carrito.css">
     <title>Carrito</title>  
+    <style>
+        
+    </style>
 </head>
 <body>
     <a href="index.html">Inicio</a>
@@ -21,23 +24,23 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && isset($_POST['id_producto']) && isset($_POST['id_cliente']) && isset($_POST['fecha_pedido'])) {
         $accion = $_POST['accion'] === 'entregar' ? 'entregado' : 'pendiente';
         $id_producto = $conexion->real_escape_string($_POST['id_producto']);
-        $id_cliente = $conexion->real_escape_string($_POST['id_cliente']);
+        $ID_cliente = $conexion->real_escape_string($_POST['ID_cliente']);
         $fecha_pedido = $conexion->real_escape_string($_POST['fecha_pedido']);
 
         $update_sql = "UPDATE pedido 
                        SET Estado = '$accion' 
                        WHERE ID_producto = '$id_producto' 
-                       AND ID_cliente = '$id_cliente' 
+                       AND ID_cliente = '$ID_cliente' 
                        AND fecha_pedido = '$fecha_pedido'";
 
         $conexion->query($update_sql);
     }
-
-    $sql = 'SELECT pe.fecha_pedido, p.ID_producto, p.Nombre AS nombre_producto, c.ID_cliente,
-            CONCAT(c.Nombre, " ", c.Apellido) AS nombre_cliente, pe.Medio_pago, pe.Cantidad, pe.Total_venta 
-            FROM pedido pe
-            INNER JOIN productos p ON p.ID_producto = pe.ID_producto
-            INNER JOIN cliente c ON c.ID_cliente = pe.ID_cliente';
+    
+$sql = 'SELECT pe.fecha_pedido, p.ID_producto, p.Nombre AS nombre_producto, c.ID_cliente,
+        CONCAT(c.Nombre, " ", c.Apellido) AS nombre_cliente, pe.Medio_pago, pe.Cantidad, pe.Total_venta 
+        FROM pedido pe
+        INNER JOIN productos p ON p.ID_producto = pe.ID_producto
+        INNER JOIN cliente c ON c.ID_cliente = pe.ID_cliente';
 
     $resultado = $conexion->query($sql);
 
@@ -70,13 +73,13 @@
                     <td>
                         <form method='POST' style='display:inline;'>
                             <input type='hidden' name='id_producto' value='{$fila['ID_producto']}'>
-                            <input type='hidden' name='id_cliente' value='{$fila['ID_cliente']}'>
+                            <input type='hidden' name='ID_cliente' value='{$fila['ID_cliente']}'>
                             <input type='hidden' name='fecha_pedido' value='{$fila['fecha_pedido']}'>
                             <button type='submit' name='accion' value='entregar'>Entregar</button>
                         </form>
                         <form method='POST' style='display:inline;'>
                             <input type='hidden' name='id_producto' value='{$fila['ID_producto']}'>
-                            <input type='hidden' name='id_cliente' value='{$fila['ID_cliente']}'>
+                            <input type='hidden' name='ID_cliente' value='{$fila['ID_cliente']}'>
                             <input type='hidden' name='fecha_pedido' value='{$fila['fecha_pedido']}'>
                             <button type='submit' name='accion' value='cancelar'>Cancelar</button>
                         </form>
