@@ -1,113 +1,110 @@
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-
 
 body {
-    background: linear-gradient(135deg, #8e44ad, #3498db);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
 }
 
-
-.container {
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 400px;
+/* Barra superior */
+.topbar {
+  background-color: #0077cc;
+  color: #fff;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-
-h1 {
-    margin-bottom: 20px;
-    font-size: 28px;
+.titulo {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-
-p {
-    font-size: 18px;
-    margin-bottom: 30px;
+.usuario-info {
+  font-size: 0.95rem;
 }
 
-
-.button {
-    background-color: #e67e22;
-    color: #fff;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
+/* Navegación */
+.navbar {
+  background-color: #006666;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
 }
 
-.button:hover {
-    background-color: #d35400;
-    transform: scale(1.05);
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.navbar a:hover {
+  text-decoration: underline;
 }
 
-
-body {
-    background: linear-gradient(135deg, #8e44ad, #3498db);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Panel de control */
+.dashboard {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
 }
 
-
-.container {
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 400px;
+.dashboard h2 {
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #0077cc;
+  padding-bottom: 0.5rem;
+  color: #003366;
 }
 
-
-h1 {
-    margin-bottom: 20px;
-    font-size: 28px;
+/* Cartas */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* <-- CENTRA las cartas */
+  gap: 2rem;
 }
 
-
-p {
-    font-size: 18px;
-    margin-bottom: 30px;
+.card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: box-shadow 0.3s;
+  width: 220px;
 }
 
-
-.button {
-    background-color: #e67e22;
-    color: #fff;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.button:hover {
-    background-color: #d35400;
-    transform: scale(1.05);
+.card i {
+  font-size: 2rem;
+  color: #0077cc;
+  margin-bottom: 0.5rem;
+}
+
+.card h4 {
+  margin: 0.5rem 0;
+  color: #444;
+}
+
+.card p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0077cc;
 }

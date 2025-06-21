@@ -63,6 +63,7 @@ ob_end_flush();
     <link rel="stylesheet" href="styles/registro.css">
 </head>
 <body>
+    <a href="index.html" class="btn btn-outline-light mb-3">Inicio</a>
 <form method="post">
             <div class="form-group">
                 <label for="nombre">Nombre</label>

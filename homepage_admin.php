@@ -1,75 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenido, admin</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Control</title>
+  <link rel="stylesheet" href="styles/homepage_admin.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-dark text-white">
+<body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Cine San Francisco</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="clientesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Clientes
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="clientesDropdown">
-              <li><a class="dropdown-item" href="insert.php">Agregar</a></li>
-              <li><a class="dropdown-item" href="update.php">Modificar</a></li>
-              <li><a class="dropdown-item" href="delete.php">Eliminar</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="select.php">Listado de Clientes</a></li>
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Productos
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="productosDropdown">
-              <li><a class="dropdown-item" href="insertp.php">Agregar</a></li>
-              <li><a class="dropdown-item" href="updatep.php">Modificar</a></li>
-              <li><a class="dropdown-item" href="deletep.php">Eliminar</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="selectp.php">Listado de Productos</a></li>
-            </ul>
-          </li>
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="titulo">Sistema Facturación</div>
+<div class="usuario-info">
+  <?php
+    date_default_timezone_set('America/Argentina/Cordoba');
+    setlocale(LC_TIME, 'es_ES.UTF-8', 'spanish');
+    echo strftime('%d de %B de %Y - %H:%M');
+  ?> | ADMIN
+</div>
 
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="ventasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Ventas
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="ventasDropdown">
-              <li><a class="dropdown-item" href="ventas.php">Ventas</a></li>
-              <li><a class="dropdown-item" href="ventadetalle.php">Detalle de Ventas</a></li>
-            </ul>
-          </li>
+  </header>
 
-        </ul>
-      </div>
-    </div>
+  <!-- Navegación -->
+  <nav class="navbar">
+    <a href="index.html">Salir</a>
   </nav>
 
-  <div class="container mt-5">
-    <h2 class="text-center">Bienvenido a Cine San Francisco</h2>
-    <p class="text-center">Selecciona una opción del menú para comenzar.</p>
-  </div>
-    <div class="imagenlogo">
-    <img src="imagenes/images__1_-removebg-preview.png" alt="">
+  <!-- Panel de control -->
+  <main class="dashboard">
+    <h2>Panel de control</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <i class="fas fa-user-friends"></i>
+        <h4>Clientes</h4>
+        <?php
+        $conexion = new mysqli("localhost", "root", "", "turismo");
+
+        if ($conexion->connect_error) {
+            echo "<p style='color:red;'>Error de conexión: " . $conexion->connect_error . "</p>";
+        } else {
+            $sql = "SELECT COUNT(*) as total FROM cliente";
+            $resultado = $conexion->query($sql);
+            $fila = $resultado->fetch_assoc();
+            echo "<p>" . $fila['total'] . "</p>";
+        }
+        ?>
+      </div>
+
+      <div class="card"><a href="insertarproducto.php">
+        <i class="fas fa-box"></i>
+        <h4>Productos</h4>
+        <?php
+        $conexion = new mysqli("localhost", "root", "", "turismo");
+
+        if ($conexion->connect_error) {
+            echo "<p style='color:red;'>Error de conexión: " . $conexion->connect_error . "</p>";
+        } else {
+            $sql = "SELECT COUNT(*) as total FROM productos";
+            $resultado = $conexion->query($sql);
+            $fila = $resultado->fetch_assoc();
+            echo "<p>" . $fila['total'] . "</p>";
+        }
+        ?>
+      </a></div>
+
+      <div class="card">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <h4>Ventas</h4>
+        <?php
+        $conexion = new mysqli("localhost", "root", "", "turismo");
+
+        if ($conexion->connect_error) {
+            echo "<p style='color:red;'>Error de conexión: " . $conexion->connect_error . "</p>";
+        } else {
+            $sql = "SELECT COUNT(*) as total FROM carrito";
+            $resultado = $conexion->query($sql);
+            $fila = $resultado->fetch_assoc();
+            echo "<p>" . $fila['total'] . "</p>";
+        }
+        ?>
+      </div>
+
     </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </main>
+
 </body>
 </html>

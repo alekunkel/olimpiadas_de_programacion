@@ -22,7 +22,7 @@ ob_end_flush();
     <div class="contenedor">
       <div class="logo">Explora Viajes</div>
       <nav class="navegacion">
-        <a href="index.html">Cerrar sesion</a>
+        <a href="index.html">Cerrar sesión</a>
         <a href="#">Destinos</a>
         <a href="#">Contacto</a>
         <a href="carritocliente.php">
@@ -74,7 +74,7 @@ ob_end_flush();
   <section class="cta">
     <h3>¿Listo para tu próxima aventura?</h3>
     <p>Contactanos y diseñamos juntos el viaje de tus sueños.</p>
-    <a href="#" class="boton">Solicitar asesoramiento</a>
+    
   </section>
 
   <!-- Pie de página -->
