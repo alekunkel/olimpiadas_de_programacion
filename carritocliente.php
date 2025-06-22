@@ -85,6 +85,22 @@ if ($resultado && $resultado->num_rows > 0) {
 
 $conexion->close();
 ?>
+<h2>Finalizar compra</h2>
+<form method="POST" action="confirmarcompra.php">
+<input type="hidden" name="ID_cliente" value="<?php echo $_SESSION['ID_cliente']; ?>">
+
+    <label for="medio_pago">Seleccioná el medio de pago:</label>
+    <select name="medio_pago" id="medio_pago" required>
+        <option value="" disabled selected>Elegí una opción</option>
+        <option value="tarjeta">Tarjeta</option>
+        <option value="MP">Mercado Pago</option>
+        <option value="uala">Uala</option>
+        <option value="naranja">Naranja X</option>
+    </select>
+
+    <br><br>
+    <button type="submit">Confirmar compra</button>
+</form>
 
 </body>
 </html>

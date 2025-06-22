@@ -25,6 +25,7 @@ ob_end_flush();
         <a href="index.html">Cerrar sesión</a>
         <a href="#">Destinos</a>
         <a href="#">Contacto</a>
+        <a href="tabla_historica.php">Historial de Compras</a>
         <a href="carritocliente.php">
           <img src="imagenes/carrito-removebg-preview.png" alt="Carrito" style="width: 30px; height: 30px;">
         </a>    

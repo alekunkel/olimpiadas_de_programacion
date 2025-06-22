@@ -68,7 +68,7 @@
         ?>
       </a></div>
 
-      <div class="card">
+      <div class="card"> <a href="carrito.php">
         <i class="fas fa-file-invoice-dollar"></i>
         <h4>Ventas</h4>
         <?php
@@ -83,7 +83,7 @@
             echo "<p>" . $fila['total'] . "</p>";
         }
         ?>
-      </div>
+      </a></div>
 
     </div>
   </main>
