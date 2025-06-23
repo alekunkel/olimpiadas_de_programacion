@@ -45,7 +45,11 @@ body {
 
 /* Hero */
 .hero {
+<<<<<<< HEAD
   background-image: url('https://source.unsplash.com/1600x900/?travel,beach');
+=======
+  background-image: url('imagenes/Paaisaje3.jpg');
+>>>>>>> master
   background-size: cover;
   background-position: center;
   height: 70vh;
