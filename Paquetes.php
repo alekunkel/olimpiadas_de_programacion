@@ -80,11 +80,16 @@ $resultado = mysqli_query($conexion, $sql);
                     <td><?= $datos['Precio'] ?></td>
                     <td><img src="<?= obtenerImagen($datos['Nombre']) ?>" alt="<?= $datos['Nombre'] ?>" class="imagen-paquete"></td>
                     <td>
-                        <form method="POST">
-                            <input type="hidden" name="paquete_id" value="<?= $datos['ID_producto'] ?>">
-                            <input type="submit" name="agregar_carrito" value="Agregar al carrito" class="btn-carrito">
-                        </form>
-                    </td>
+                        <?php if ($datos['Cantidad'] == 0): ?>
+                            <span style="color: red; font-weight: bold;">Producto sin stock</span>
+                        <?php else: ?>
+        <form method="POST">
+            <input type="hidden" name="paquete_id" value="<?= $datos['ID_producto'] ?>">
+            <input type="submit" name="agregar_carrito" value="Agregar al carrito" class="btn-carrito">
+        </form>
+    <?php endif; ?>
+</td>
+
                 </tr>
             <?php endwhile; ?>
         </table>

@@ -6,10 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="post">
-        <label for="medio_pago"></label>
-        <input type="text" name="medio_pago" id="medio_pago" class="form-control" required>
-    </form>
 
 <?php
 $conexion = new mysqli("localhost", "root", "", "turismo");
@@ -39,6 +35,8 @@ while ($item = $carrito->fetch_assoc()) {
 $conexion->query("DELETE FROM carrito WHERE ID_cliente = $id_cliente");
 
 echo "✅ Compra confirmada. ¡Gracias por tu pedido!";
+header("Location: homepage_cliente.php");
+$conexion->close();
 ?>
 </body>
 </html>

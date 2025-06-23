@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="homepage_cliente.php">Volver a la página principal</a>
+</body>
+</html>
 <?php
 session_start();
 $conexion = new mysqli("localhost", "root", "", "turismo");
@@ -9,11 +20,19 @@ if (!isset($_SESSION['ID_cliente'])) {
 
 $id_cliente = $_SESSION['ID_cliente'];
 
-$sql = "SELECT p.Nombre AS nombre_producto, pe.Cantidad, pe.Total_venta, pe.Medio_pago, pe.fecha_pedido, pe.Estado
+$sql = "SELECT 
+            p.Nombre AS nombre_producto, 
+            SUM(pe.Cantidad) AS Cantidad, 
+            SUM(pe.Total_venta) AS Total_venta, 
+            pe.Medio_pago, 
+            DATE(pe.fecha_pedido) AS fecha_pedido, 
+            pe.Estado
         FROM pedido pe
         INNER JOIN productos p ON p.ID_producto = pe.ID_producto
         WHERE pe.ID_cliente = '$id_cliente'
-        ORDER BY pe.fecha_pedido DESC";
+        GROUP BY p.Nombre, pe.Medio_pago, DATE(pe.fecha_pedido), pe.Estado
+        ORDER BY fecha_pedido DESC";
+
 
 $resultado = $conexion->query($sql);
 

@@ -34,7 +34,7 @@
 
     <div class="cards">
 
-      <div class="card">
+      <div class="card"><a href="listaclientes.php">
         <i class="fas fa-user-friends"></i>
         <h4>Clientes</h4>
         <?php
@@ -49,9 +49,9 @@
             echo "<p>" . $fila['total'] . "</p>";
         }
         ?>
-      </div>
-
-      <div class="card"><a href="insertarproducto.php">
+      </a></div>
+      
+      <div class="card">
         <i class="fas fa-box"></i>
         <h4>Productos</h4>
         <?php
@@ -66,7 +66,10 @@
             echo "<p>" . $fila['total'] . "</p>";
         }
         ?>
-      </a></div>
+        <p><a href="insertarproducto.php" class="btn btn-sm btn-success">Agregar</a></p>
+        <p><a href="modificarproducto.php" class="btn btn-sm btn-info">Modificar</a></p>
+
+        </div>
 
       <div class="card"> <a href="carrito.php">
         <i class="fas fa-file-invoice-dollar"></i>
@@ -77,7 +80,7 @@
         if ($conexion->connect_error) {
             echo "<p style='color:red;'>Error de conexión: " . $conexion->connect_error . "</p>";
         } else {
-            $sql = "SELECT COUNT(*) as total FROM carrito";
+            $sql = "SELECT COUNT(*) as total FROM pedido WHERE Estado = 'pendiente'";
             $resultado = $conexion->query($sql);
             $fila = $resultado->fetch_assoc();
             echo "<p>" . $fila['total'] . "</p>";
