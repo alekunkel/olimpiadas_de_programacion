@@ -86,6 +86,7 @@ ob_end_flush();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+      <link rel="icon" href="imagenes/Logo azul.png" type="image/png">
     <title>Registrarse</title>
     <link rel="stylesheet" href="styles/registro.css">
 </head>

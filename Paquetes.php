@@ -10,16 +10,6 @@ if (!$conexion) {
     die("Error al conectar con la base de datos: " . mysqli_connect_error());
 }
 
-function obtenerImagen($nombre) {
-    $nombre = strtolower($nombre);
-    if (str_contains($nombre, 'brasil')) return 'imagenes/brasil.jpg';
-    if (str_contains($nombre, 'cancun')) return 'imagenes/Cancun.jpg';
-    if (str_contains($nombre, 'paris')) return 'imagenes/Paris.jpg';
-    if (str_contains($nombre, 'automovil')) return 'imagenes/Auto.jpg';
-    if (str_contains($nombre, 'madrid')) return 'imagenes/Madrid.jpg';
-    return 'img/default.jpg';
-}
-
 // Procesar envío del formulario (Agregar al carrito)
 if (isset($_POST['agregar_carrito'])) {
     $ID_producto = intval($_POST['paquete_id']);
@@ -46,8 +36,8 @@ if (isset($_POST['agregar_carrito'])) {
     }
 }
 
-// Obtener productos
-$sql = "SELECT ID_producto, Nombre, Calificacion, Cantidad, Precio FROM productos";
+// Obtener productos incluyendo el campo Imagen
+$sql = "SELECT ID_producto, Nombre, Calificacion, Cantidad, Precio, Imagen FROM productos";
 $resultado = mysqli_query($conexion, $sql);
 ?>
 
@@ -55,12 +45,18 @@ $resultado = mysqli_query($conexion, $sql);
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+      <link rel="icon" href="imagenes/Logo azul.png" type="image/png">
     <title>Datos - Productos</title>
     <link rel="stylesheet" href="styles/Paquete.css">
 </head>
 <body>
 <div class="contenedor-tabla">
     <h1 class="titulo-formulario">Lista de Paquetes</h1>
+    <div class="botones-acciones">
+        <a href="homepage_cliente.php" class="boton boton-inicio">
+            <i class="fas fa-home"></i> Volver al inicio
+        </a>
+    </div>
 
     <?php if (mysqli_num_rows($resultado) > 0): ?>
         <table>
@@ -78,18 +74,23 @@ $resultado = mysqli_query($conexion, $sql);
                     <td><?= $datos['Calificacion'] ?></td>
                     <td><?= $datos['Cantidad'] ?></td>
                     <td><?= $datos['Precio'] ?></td>
-                    <td><img src="<?= obtenerImagen($datos['Nombre']) ?>" alt="<?= $datos['Nombre'] ?>" class="imagen-paquete"></td>
+                    <td>
+                        <?php if (!empty($datos['Imagen'])): ?>
+                            <img src="imagenes/<?= htmlspecialchars($datos['Imagen']) ?>" alt="<?= htmlspecialchars($datos['Nombre']) ?>" class="imagen-paquete">
+                        <?php else: ?>
+                            <img src="img/default.jpg" alt="Imagen por defecto" class="imagen-paquete">
+                        <?php endif; ?>
+                    </td>
                     <td>
                         <?php if ($datos['Cantidad'] == 0): ?>
                             <span style="color: red; font-weight: bold;">Producto sin stock</span>
                         <?php else: ?>
-        <form method="POST">
-            <input type="hidden" name="paquete_id" value="<?= $datos['ID_producto'] ?>">
-            <input type="submit" name="agregar_carrito" value="Agregar al carrito" class="btn-carrito">
-        </form>
-    <?php endif; ?>
-</td>
-
+                            <form method="POST">
+                                <input type="hidden" name="paquete_id" value="<?= $datos['ID_producto'] ?>">
+                                <input type="submit" name="agregar_carrito" value="Agregar al carrito" class="btn-carrito">
+                            </form>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endwhile; ?>
         </table>
@@ -99,7 +100,141 @@ $resultado = mysqli_query($conexion, $sql);
         </div>
     <?php endif; ?>
 
-    <a href="carritocliente.php">Ver Carrito</a>
+    <div class="botones-acciones">
+        <a href="carritocliente.php" class="boton boton-carrito">
+            <i class="fas fa-shopping-cart"></i> Ver carrito
+        </a>
+    </div>
 </div>
 </body>
 </html>
+<style>
+    /* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #fff);
+    min-height: 100vh;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.contenedor-tabla {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 900px;
+}
+
+.titulo-formulario {
+    text-align: center;
+    font-size: 28px;
+    color: #00796b;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+th {
+    background-color: #004d40;
+    color: white;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+tr:hover {
+    background-color: #e0f2f1;
+    cursor: pointer;
+}
+
+.mensaje {
+    text-align: center;
+    font-size: 18px;
+    color: #d32f2f;
+    padding: 15px;
+    border: 1px solid #f44336;
+    background-color: #ffebee;
+    border-radius: 8px;
+}
+
+.imagen-paquete {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.imagen-paquete:hover {
+    transform: scale(1.05);
+}
+
+.botones-acciones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #0077cc;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.boton:hover {
+  background-color: #005fa3;
+  transform: scale(1.03);
+}
+
+.boton i {
+  font-size: 1.1rem;
+}
+
+/* ... tu CSS actual ... */
+.imagen-paquete {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+.imagen-paquete:hover {
+    transform: scale(1.05);
+}
+/* resto de tu CSS ... */
+
+</style>

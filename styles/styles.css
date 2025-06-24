@@ -29,9 +29,23 @@ body {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+.logo img {
+  height: 40px;   
+  width: auto;
+  margin-right: 10px;
+}
+
+.logo span {
   font-size: 1.8rem;
   font-weight: bold;
 }
+
 
 .navegacion a {
   color: #fff;
@@ -199,4 +213,4 @@ html, body {
 
 .enlaces-footer a:hover {
   text-decoration: underline;
-}
+} 

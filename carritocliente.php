@@ -21,6 +21,7 @@ if (isset($_GET['eliminar'])) {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+    <link rel="icon" href="imagenes/Logo azul.png" type="image/png">
   <title>Mi Carrito</title>
   <style>
     body {
@@ -207,7 +208,7 @@ $conexion->close();
     <label for="medio_pago">Seleccioná el medio de pago:</label><br><br>
     <select name="medio_pago" id="medio_pago" required>
         <option value="" disabled selected>Elegí una opción</option>
-        <option value="tarjeta">Tarjeta</option>
+        <option value="tarjeta">Tarjeta de débito o crédito</option>
         <option value="MP">Mercado Pago</option>
         <option value="uala">Ualá</option>
         <option value="naranja">Naranja X</option>
