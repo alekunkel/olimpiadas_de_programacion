@@ -35,9 +35,13 @@ $stmt_carrito->bind_param("i", $id_cliente);
 $stmt_carrito->execute();
 $resultado = $stmt_carrito->get_result();
 
+// Si el carrito está vacío, mostrar alerta y redirigir
 if ($resultado->num_rows === 0) {
-    echo "El carrito está vacío.";
     $conexion->close();
+    echo "<script>
+        alert('Tu carrito está vacío. Por favor, agrega productos antes de confirmar la compra.');
+        window.location.href = 'carritocliente.php';
+    </script>";
     exit();
 }
 
@@ -129,7 +133,7 @@ try {
     $mail->Port = 465;
     $mail->CharSet = 'UTF-8';
 
-    $mail->setFrom('atencionalclienteexploraviajes@gmail.com', 'atención al cliente de explora viajes');
+    $mail->setFrom('atencionalclienteexploraviajes@gmail.com', 'Atención al cliente de Explora Viajes');
     $mail->addAddress($email_cliente, $nombre_cliente);
     $mail->isHTML(true);
     $mail->Subject = 'Confirmación de tu compra';
@@ -140,7 +144,7 @@ try {
 
     $mail->send();
 
-    // Si el correo se envió correctamente, eliminamos el PDF
+    // Solo eliminar PDF si el correo se envió correctamente
     unlink($pdf_path);
 
 } catch (Exception $e) {

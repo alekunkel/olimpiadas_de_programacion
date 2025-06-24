@@ -99,8 +99,6 @@ ob_end_flush();
         <div class="mensaje-error"><?= $error ?></div>
     <?php endif; ?>
 
-    <p style="color: white;">La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.</p>
-
     <div class="form-group">
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" name="nombre" class="form-control" required
