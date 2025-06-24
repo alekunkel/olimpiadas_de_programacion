@@ -75,6 +75,7 @@ ob_end_flush();
             <div class="mb-3">
                 <label for="contrasena">Contraseña</label>
                 <input type="password" name="contrasena" id="contrasena" class="form-control" required>
+                <button type="button" onclick="togglePassword('contrasena', this)" style="margin-left: 10px;">Mostrar</button>
             </div>
             <input type="submit" name="iniciar_sesion" value="Iniciar Sesión" class="btn btn-success">
         </form>
@@ -82,5 +83,19 @@ ob_end_flush();
         <hr>
         <p>¿No tienes una cuenta? <a href="registro.php">Regístrate aquí</a></p>
     </div>
+
+    <script>
+function togglePassword(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "Ocultar";
+    } else {
+        input.type = "password";
+        btn.textContent = "Mostrar";
+    }
+}
+</script>
+
 </body>
 </html>

@@ -14,6 +14,8 @@ ob_end_flush();
   <meta charset="UTF-8">
   <title>Bienvenido Cliente</title>
   <link rel="stylesheet" href="styles/homepage_cliente.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 <body>
 
@@ -23,21 +25,18 @@ ob_end_flush();
       <div class="logo">Explora Viajes</div>
       <nav class="navegacion">
         <a href="index.html">Cerrar sesión</a>
-        <a href="#">Destinos</a>
-        <a href="#">Contacto</a>
-<<<<<<< HEAD
-=======
         <a href="tabla_historica.php">Historial de Compras</a>
->>>>>>> master
-        <a href="carritocliente.php">
-          <img src="imagenes/carrito-removebg-preview.png" alt="Carrito" style="width: 30px; height: 30px;">
-        </a>    
+        <a href="carritocliente.php" class="carrito-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero con fondo dinámico -->
   <section class="hero">
+    <div class="slider-bg" id="slider-bg"></div>
+    <div class="hero-overlay"></div>
     <div class="hero-contenido">
       <h1>Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?></h1>
       <h2>Descubrí el mundo con nosotros</h2>
@@ -51,21 +50,21 @@ ob_end_flush();
     <h3>Destinos Populares</h3>
     <div class="grid-destinos">
       <div class="destino">
-        <img src="https://source.unsplash.com/400x250/?paris" alt="París">
+        <img src="imagenes/Paris.jpg" alt="París">
         <div class="info">
           <h4>París</h4>
           <p>Desde $1500 USD. Incluye vuelo y hotel por 5 noches.</p>
         </div>
       </div>
       <div class="destino">
-        <img src="https://source.unsplash.com/400x250/?tokyo" alt="Tokio">
+        <img src="imagenes/tokyo.jpg" alt="Tokio">
         <div class="info">
           <h4>Tokio</h4>
           <p>Desde $2200 USD. Cultura y modernidad en 7 días.</p>
         </div>
       </div>
       <div class="destino">
-        <img src="https://source.unsplash.com/400x250/?patagonia" alt="Patagonia">
+        <img src="imagenes/descarga.jpg" alt="Patagonia">
         <div class="info">
           <h4>Patagonia Argentina</h4>
           <p>Desde $800 USD. Naturaleza pura y paisajes únicos.</p>
@@ -78,7 +77,6 @@ ob_end_flush();
   <section class="cta">
     <h3>¿Listo para tu próxima aventura?</h3>
     <p>Contactanos y diseñamos juntos el viaje de tus sueños.</p>
-    
   </section>
 
   <!-- Pie de página -->
@@ -93,9 +91,27 @@ ob_end_flush();
     </div>
   </footer>
 
+  <!-- JavaScript para cambiar fondo -->
+  <script>
+    const imagenes = [
+      "imagenes\kalen-emsley-Bkci_8qcdvQ-unsplash.jpg",
+      "imagenes\luca-bravo-zAjdgNXsMeg-unsplash.jpg",
+      "imagenes\matthew-henry-2nY4j8d9b6c-unsplash.jpg",
+      "imagenes\mike-von-woelk-3j6b1a8"
+    ];
+    let indice = 0;
+    const slider = document.getElementById("slider-bg");
+
+    function cambiarFondo() {
+      if (slider) {
+        slider.style.backgroundImage = `url('${imagenes[indice]}')`;
+        indice = (indice + 1) % imagenes.length;
+      }
+    }
+
+    cambiarFondo(); // mostrar el primero
+    setInterval(cambiarFondo, 5000); // cambiar cada 5 segundos
+  </script>
+
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> master
