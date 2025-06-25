@@ -11,11 +11,31 @@ if (!isset($_SESSION['ID_cliente'])) {
     exit;
 }
 $ID_cliente = $_SESSION['ID_cliente'];
-
 if (isset($_GET['eliminar'])) {
     $id_carrito = intval($_GET['eliminar']);
-    $conexion->query("DELETE FROM carrito WHERE ID_carrito = $id_carrito AND ID_cliente = $ID_cliente");
+
+    // Obtener ID_producto y Cantidad desde el carrito
+    $consulta = $conexion->prepare("SELECT ID_producto, Cantidad FROM carrito WHERE ID_carrito = ? AND ID_cliente = ?");
+    $consulta->bind_param("ii", $id_carrito, $ID_cliente);
+    $consulta->execute();
+    $resultado = $consulta->get_result();
+
+    if ($resultado && $resultado->num_rows > 0) {
+        $producto = $resultado->fetch_assoc();
+        $id_producto = $producto['ID_producto'];
+        $cantidad = $producto['Cantidad'];
+
+        // Actualizar el stock: devolver la cantidad eliminada
+        $update = $conexion->prepare("UPDATE productos SET Cantidad = Cantidad + ? WHERE ID_producto = ?");
+        $update->bind_param("ii", $cantidad, $id_producto);
+        $update->execute();
+        $update->close();
+
+        $conexion->query("DELETE FROM carrito WHERE ID_carrito = $id_carrito AND ID_cliente = $ID_cliente");
+    }
+    $consulta->close();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -23,7 +43,80 @@ if (isset($_GET['eliminar'])) {
   <meta charset="UTF-8">
     <link rel="icon" href="imagenes/Logo azul.png" type="image/png">
   <title>Mi Carrito</title>
-  <style>
+  
+</head>
+<body>
+
+<div class="container">
+  <a href="homepage_cliente.php" class="volver">← Inicio</a>
+  <h1>Mi Carrito</h1>
+
+<?php  
+$sql = "SELECT 
+            carrito.ID_carrito,
+            carrito.fecha_cargado,
+            carrito.Cantidad,
+            carrito.Precio_total,
+            carrito.Estado,
+            productos.ID_producto,
+            productos.Nombre AS nombre_producto
+        FROM carrito
+        INNER JOIN productos ON carrito.ID_producto = productos.ID_producto
+        WHERE carrito.ID_cliente = $ID_cliente";
+
+$resultado = $conexion->query($sql);
+
+if ($resultado && $resultado->num_rows > 0) {
+    echo "<table>
+            <thead> 
+                <tr>
+                    <th>Fecha</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>";
+    while ($fila = $resultado->fetch_assoc()) {
+        echo "<tr>
+                <td>{$fila['fecha_cargado']}</td>
+                <td>{$fila['nombre_producto']}</td>
+                <td>{$fila['Cantidad']}</td>
+                <td>\${$fila['Precio_total']}</td>
+                <td>{$fila['Estado']}</td>
+                <td><a class='btn-eliminar' href='carritocliente.php?eliminar={$fila['ID_carrito']}' onclick='return confirm(\"¿Seguro que deseas eliminar este producto del carrito?\")'>Eliminar</a></td>
+              </tr>";
+    }
+    echo "</tbody></table>";
+} else {
+    echo "<div class='alert alert-warning'>No hay productos en tu carrito.</div>";
+}
+
+$conexion->close();
+?>
+
+  <h2>Finalizar compra</h2>
+  <form method="POST" action="confirmarcompra.php">
+    <input type="hidden" name="ID_cliente" value="<?php echo $_SESSION['ID_cliente']; ?>">
+
+    <label for="medio_pago">Seleccioná el medio de pago:</label><br><br>
+    <select name="medio_pago" id="medio_pago" required>
+        <option value="" disabled selected>Elegí una opción</option>
+        <option value="tarjeta">Tarjeta</option>
+        <option value="MP">Mercado Pago</option>
+        <option value="uala">Ualá</option>
+        <option value="naranja">Naranja X</option>
+    </select>
+    <br><br>
+    <button type="submit">Confirmar compra</button>
+  </form>
+</div>
+
+</body>
+</html>
+<style>
     body {
       font-family: Arial, sans-serif;
       background-image: url('imagenes/Paisaje1.jpg');
@@ -148,75 +241,3 @@ if (isset($_GET['eliminar'])) {
       color: #856404;
     }
   </style>
-</head>
-<body>
-
-<div class="container">
-  <a href="homepage_cliente.php" class="volver">← Inicio</a>
-  <h1>Mi Carrito</h1>
-
-<?php  
-$sql = "SELECT 
-            carrito.ID_carrito,
-            carrito.fecha_cargado,
-            carrito.Cantidad,
-            carrito.Precio_total,
-            carrito.Estado,
-            productos.ID_producto,
-            productos.Nombre AS nombre_producto
-        FROM carrito
-        INNER JOIN productos ON carrito.ID_producto = productos.ID_producto
-        WHERE carrito.ID_cliente = $ID_cliente";
-
-$resultado = $conexion->query($sql);
-
-if ($resultado && $resultado->num_rows > 0) {
-    echo "<table>
-            <thead> 
-                <tr>
-                    <th>Fecha</th>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Total</th>
-                    <th>Estado</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>";
-    while ($fila = $resultado->fetch_assoc()) {
-        echo "<tr>
-                <td>{$fila['fecha_cargado']}</td>
-                <td>{$fila['nombre_producto']}</td>
-                <td>{$fila['Cantidad']}</td>
-                <td>\${$fila['Precio_total']}</td>
-                <td>{$fila['Estado']}</td>
-                <td><a class='btn-eliminar' href='carritocliente.php?eliminar={$fila['ID_carrito']}' onclick='return confirm(\"¿Seguro que deseas eliminar este producto del carrito?\")'>Eliminar</a></td>
-              </tr>";
-    }
-    echo "</tbody></table>";
-} else {
-    echo "<div class='alert alert-warning'>No hay productos en tu carrito.</div>";
-}
-
-$conexion->close();
-?>
-
-  <h2>Finalizar compra</h2>
-  <form method="POST" action="confirmarcompra.php">
-    <input type="hidden" name="ID_cliente" value="<?php echo $_SESSION['ID_cliente']; ?>">
-
-    <label for="medio_pago">Seleccioná el medio de pago:</label><br><br>
-    <select name="medio_pago" id="medio_pago" required>
-        <option value="" disabled selected>Elegí una opción</option>
-        <option value="tarjeta">Tarjeta de débito o crédito</option>
-        <option value="MP">Mercado Pago</option>
-        <option value="uala">Ualá</option>
-        <option value="naranja">Naranja X</option>
-    </select>
-    <br><br>
-    <button type="submit">Confirmar compra</button>
-  </form>
-</div>
-
-</body>
-</html>

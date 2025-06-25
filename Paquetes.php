@@ -10,29 +10,61 @@ if (!$conexion) {
     die("Error al conectar con la base de datos: " . mysqli_connect_error());
 }
 
-// Procesar envío del formulario (Agregar al carrito)
 if (isset($_POST['agregar_carrito'])) {
+    if (!isset($_SESSION['ID_cliente'])) {
+        echo "<script>alert('Debes iniciar sesión para agregar al carrito.');</script>";
+        exit;
+    }
+
     $ID_producto = intval($_POST['paquete_id']);
     $ID_cliente = $_SESSION['ID_cliente'];
 
-    $consulta = "SELECT Cantidad, Precio FROM productos WHERE ID_producto = $ID_producto";
-    $resultado = mysqli_query($conexion, $consulta);
-    $producto = mysqli_fetch_assoc($resultado);
+    // Obtener stock y precio del producto
+    $consulta_producto = "SELECT Cantidad AS stock_disponible, Precio FROM productos WHERE ID_producto = $ID_producto";
+    $resultado_producto = mysqli_query($conexion, $consulta_producto);
+    $producto = mysqli_fetch_assoc($resultado_producto);
 
-    if ($producto && $producto['Cantidad'] > 0) {
-        $precio = $producto['Precio'];
+    if ($producto && $producto['stock_disponible'] > 0) {
+        $precio_unitario = $producto['Precio'];
+        $stock_disponible = intval($producto['stock_disponible']);
 
-        $insertar = "INSERT INTO carrito (ID_cliente, ID_producto, Cantidad, Precio_total, Estado, fecha_cargado)
-                     VALUES ($ID_cliente, $ID_producto, 1, $precio, 'Pendiente', NOW())";
-        $actualizar_stock = "UPDATE productos SET Cantidad = Cantidad - 1 WHERE ID_producto = $ID_producto";
+        // Verificar si ya está en el carrito
+        $consulta_carrito = "SELECT Cantidad FROM carrito WHERE ID_cliente = $ID_cliente AND ID_producto = $ID_producto AND Estado = 'Pendiente'";
+        $resultado_carrito = mysqli_query($conexion, $consulta_carrito);
+        $carrito_existente = mysqli_fetch_assoc($resultado_carrito);
 
-        if (mysqli_query($conexion, $insertar) && mysqli_query($conexion, $actualizar_stock)) {
-            echo "<script>alert('¡Paquete agregado al carrito correctamente!');</script>";
+        if ($carrito_existente) {
+            $cantidad_actual = intval($carrito_existente['Cantidad']);
+
+            if ($cantidad_actual + 1 > $stock_disponible) {
+                echo "<script>alert('No puedes agregar más de la cantidad disponible en stock.');</script>";
+            } else {
+                // Sumar 1 al carrito
+                $nueva_cantidad = $cantidad_actual + 1;
+                $nuevo_total = $nueva_cantidad * $precio_unitario;
+
+                $update = "UPDATE carrito 
+                           SET Cantidad = $nueva_cantidad, Precio_total = $nuevo_total 
+                           WHERE ID_cliente = $ID_cliente AND ID_producto = $ID_producto AND Estado = 'Pendiente'";
+                if (mysqli_query($conexion, $update)) {
+                    echo "<script>alert('Producto agregado al carrito.');</script>";
+                } else {
+                    echo "<script>alert('Error al actualizar el carrito.');</script>";
+                }
+            }
         } else {
-            echo "<script>alert('Error al agregar al carrito.');</script>";
+            // Primera vez que lo agrega
+            $insertar = "INSERT INTO carrito (ID_cliente, ID_producto, Cantidad, Precio_total, Estado, fecha_cargado)
+                         VALUES ($ID_cliente, $ID_producto, 1, $precio_unitario, 'Pendiente', NOW())";
+
+            if (mysqli_query($conexion, $insertar)) {
+                echo "<script>alert('Producto agregado al carrito.');</script>";
+            } else {
+                echo "<script>alert('Error al agregar al carrito.');</script>";
+            }
         }
     } else {
-        echo "<script>alert('No hay stock disponible para este producto.');</script>";
+        echo "<script>alert('Este producto no tiene stock disponible.');</script>";
     }
 }
 
